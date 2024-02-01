@@ -1,0 +1,33 @@
+body {
+    background-color: #fbd1a2;
+}
+
+p {
+
+    font-size: 1.25em;
+    font-family: 'Nunito Sans', sans-serif;
+    /*weights: 300(light), 400(regular), 700(bold), 800*/
+    font-weight: 400;
+    color: #000000;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 800;
+    color: #263159;
+}
+
+.custom-btn {
+    background-color: #f79256;
+    color: #fffffe;
+}
+
+.custom-bg {
+    background-color: #00b2ca;
+}
+
+.custom-bg2 {
+    background-color: #7dcfb6;
+}

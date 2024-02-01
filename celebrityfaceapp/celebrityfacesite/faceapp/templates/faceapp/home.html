@@ -1,27 +1,86 @@
 {% extends 'faceapp/base.html' %}
 {% block content %}
 {% load static %}
+{% load widget_tweaks %}
 
 
-    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 bg-light ">
+    <div class="position-relative overflow-hidden">
         <div class="col-md-12 p-lg-5 my-5">
             <div class="row">
                 <div class="col-6">
-                    <h1 class="col-6">Who do you look like?</h1>
-                    <h1 class="col-6"></h1>
+                    <div class="w-50">
+                        <img class="img-fluid" src="{% static 'faceapp/images/undraw_team_re_0bfe.svg' %}" alt="People Image"/>
+                    </div>
                 </div>
+                
                 <div class="col-6 d-flex align-items-center justify-content-center">
                     <div class="content">
-                        <h4 class="">Find out</h4>
-                        
+                        <h1>Who do you look like?</h1>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="img">
-        <img class="img-fluid" src="{% static 'faceapp/images/undraw_team_re_0bfe.svg' %}" alt="People Image"/>
+    <p class="container h3">With almost one click, find out which celebrity out of 17 you are most similar to.</p>
+
+   <hr class="w-3 custom-bg2">
+    <div class="position-relative overflow-hidden "> <!--ili stavi samo horizontalnne linije te boje-->
+        <div class="col-md-12 p-lg-5 my-5">
+            <div class="row">
+                <div class="col-3">
+                    <p>Number of requests processed</p>
+                </div>
+                
+                <div class="col-9 d-flex align-items-center justify-content-center">
+                    <div class="content">
+                        <p>Graf</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="h-3 custom-bg2">
+
+
+    <div class="position-relative overflow-hidden">
+        <div class="col-md-12 p-lg-5 my-5">
+            <div class="row">
+                <div class="col-9">
+                    <p class="">How to use the application?</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">1. Upload image by drag and drop or url.</li>
+                        <li class="list-group-item">2. Write the age of the person in the picture</li>
+                        <li class="list-group-item">3. Click the Get Result button</li>
+                    </ul>
+                </div>
+                
+                <div class="col-3 d-flex align-items-center justify-content-center">
+                    <img class="img-fluid" src="{% static 'faceapp/images/undraw_experts_re_i40h.svg' %}" alt="People photo image"/>
+                </div>
+            </div>
+        </div>
     </div>
 
-{% endblock content %}
+
+    <div class="card">
+        <div class="card-header custom-bg">
+          Where magic happens...
+        </div>
+        <div class="card-body">
+
+
+        <form action="{% url 'faceapp:post_user_data' %}" method="post"> 
+            <div class="form-group">
+            {% csrf_token %}
+            {% include 'faceapp/form.html' with form=form %}
+    
+            <div class="row mt-4 text-center mb-5">
+                <div clss="col-md-8 ms-2">
+                    <input type="submit" value="Get Result" class="custom-btn btn px-4 py-2">
+                </div>
+            </div>
+            </div>
+        </form>      
+    </div>
+{% endblock %}

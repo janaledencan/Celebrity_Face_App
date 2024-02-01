@@ -16,8 +16,13 @@ h2,
 h3 {
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 800;
-    color: #263159;
+    color: #000000;
 }
+
+h1 {
+    font-size: 100px;
+}
+
 
 .custom-btn {
     background-color: #f79256;
@@ -29,5 +34,12 @@ h3 {
 }
 
 .custom-bg2 {
+    background-color: #7dcfb6;
+}
+
+
+
+hr {
+    height: 20px;
     background-color: #7dcfb6;
 }

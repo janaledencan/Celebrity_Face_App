@@ -16,6 +16,7 @@ def home(request):
 
 def post_user_data(request):
     form = UserForm(initial={"sex": "M"})
+
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():

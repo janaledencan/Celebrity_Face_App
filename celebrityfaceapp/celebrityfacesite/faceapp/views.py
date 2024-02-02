@@ -5,9 +5,13 @@ from faceapp.forms import UserForm
 from faceapp.models import User
 
 
+
 def home(request):
     form = UserForm(initial={"sex": "M"})
-    context = {"form": form}
+    result_number=User.objects.count()
+    context = {"form": form,
+               "result_number": result_number
+               }
     return render(request, "faceapp/home.html", context)
 
 def post_user_data(request):

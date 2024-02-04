@@ -63,7 +63,7 @@
     </div>
 
 
-    <div class="card mb-5">
+    <div class="card mb-5 shadow-lg mb-5 bg-body rounded">
         <div class="card-header custom-bg">
           Where magic happens...
         </div>
@@ -81,7 +81,7 @@
         
                 <div class="row mt-4 text-center mb-5">
                     <div clss="col-md-8 ms-2">
-                        <input type="submit" value="Get Result" class="custom-btn btn px-4 py-2">
+                        <input type="submit" value="Get Result" class="custom-btn btn px-4 py-2 shadow rounded">
                     </div>
                 </div>
                 </div>
@@ -235,13 +235,21 @@
                 
                 <div class="col-8 d-flex align-items-center justify-content-center">
                     <div class="content row">
-                        <div class="col-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <div class="col-2 ms-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
                             </svg>
                         </div>
-                        <div class="col-6"><p>Here are all 17 celebrities you can look like.</p></div>
-                    </div>
+                        <div class="col-6"><h2>Here are all 17 celebrities you can look like.</h2></div>
+                        <div class="mt-4 ms-4">
+                            <p>The model does a completely accurate classification for those 17 celebrities, 
+                            and in the case of submitting your own picture, you will get a probability of belonging to one 
+                            of those 17 classes, which should not be taken literally as a match percentage, but means that 
+                            you have the highest match of those 17 celebrities.</p>
+                            <p>It should also be noted that the result depends on the light and the angle from which the 
+                            picture is taken.</p></div>
+                    </div>   
+                    
                 </div>
             </div>
         </div>

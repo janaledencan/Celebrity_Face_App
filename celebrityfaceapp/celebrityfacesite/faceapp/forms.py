@@ -13,7 +13,7 @@ class UserForm(forms.ModelForm):
         ]
 
         widgets = {
-            "age": forms.NumberInput(attrs={"class": "form-control"}),
+            "age": forms.Select(attrs={"class": "form-control"}),
             "sex": forms.Select(attrs={"class": "form-control"}),
         }
 
@@ -24,14 +24,6 @@ class UserForm(forms.ModelForm):
 
     def clean(self):
         errors = []
-
-        if "age" in self.cleaned_data:
-            if self.cleaned_data["age"] > 100:
-                errors.append(
-                    ValidationError("You can't enter age higher than 100!")
-                )
-        else:
-            errors.append(ValidationError("You have to enter age!"))
 
         if errors:
             raise ValidationError(errors)

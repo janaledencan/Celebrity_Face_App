@@ -10,7 +10,7 @@ class UserForm(forms.ModelForm):
         fields = [
             "age",
             "sex",
-            
+            "image",
         ]
 
         widgets = {

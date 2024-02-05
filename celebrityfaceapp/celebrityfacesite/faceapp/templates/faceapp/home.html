@@ -70,12 +70,11 @@
         <div class="card-body mt-4">
           
 
-            <form action="{% url 'faceapp:post_user_data' %}" method="post" enctype="multipart/form-data"> 
+            <form action="{% url 'faceapp:post_user_data' %}" method="POST" enctype="multipart/form-data"> 
                 <div class="form-group mt-5">
                 {% csrf_token %}
                 
-                <input type="file" name="uploaded_img">
-                {% include 'faceapp/form.html' with form=form %}
+                {{ form.as_p }}
                     
                     <div class="row mt-4 text-center mb-5">
                         <div >
@@ -84,30 +83,6 @@
                     </div>
                 </div>
             </form>
-
-            <form action="{% url 'faceapp:post_user_data' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <input type="file" name = "uploaded_img">
-                <label for="cars">Choose age range:</label>
-
-                <select name="age" id="ages">
-                    <option value="15-25">15-25</option>
-                    <option value="26-40">26-40</option>
-                    <option value="41-55">41-55</option>
-                    <option value="55+">55+</option>
-                </select>
-                
-                <select name="sex" id="sexes">
-                    <option value="male">male</option>
-                    <option value="female">female</option>
-                   
-                </select>
-
-                <input type="submit" value="Get Result" class="custom-btn btn px-4 py-2 shadow">
-
-            </form>
-
 
         </div>      
     </div>

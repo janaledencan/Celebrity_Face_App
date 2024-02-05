@@ -8,6 +8,7 @@ matplotlib
 pillow 
 numpy 
 mtcnn
+plotly
 
 
 

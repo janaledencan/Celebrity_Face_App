@@ -12,6 +12,8 @@ from numpy import asarray
 from mtcnn.mtcnn import MTCNN
 from numpy import expand_dims
 
+import plotly as pl
+
 import urllib.request
 import json
 import os
@@ -49,9 +51,16 @@ def allowSelfSignedHttps(allowed):
 
 def home(request):
     form = UserForm(initial={"sex": "M"})
+
+    #-------------------------------------------------------Added by Nikola-----------------------------------------------------------#
+    fig = pl.graph_objs.Figure(data=[pl.graph_objs.Bar(x=['Male','Female'],y=[135,111])])
+    graph_div = pl.offline.plot(fig, auto_open = False, output_type="div")
+    #---------------------------------------------------------------------------------------------------------------------------------#
+
     result_number=User.objects.count()
     context = {"form": form,
-               "result_number": result_number
+               "result_number": result_number,
+               "graph_div":graph_div
                }
     return render(request, "faceapp/home.html", context)
 
@@ -62,10 +71,14 @@ def post_user_data(request):
     class_names = ['Angelina Jolie', 'Brad Pitt', 'Denzel Washington', 'Hugh Jackman', 'Jennifer Lawrence', 'Johnny Depp', 'Kate Winslet', 'Leonardo DiCaprio', 'Megan Fox', 'Natalie Portman', 'Nicole Kidman', 'Robert Downey Jr', 'Sandra Bullock', 'Scarlett Johansson', 'Tom Cruise', 'Tom Hanks', 'Will Smith']
 
 
+
+
     if request.method == "POST":
         #form = UserForm(request.POST, request.FILES)
         #form = ImageForm(request.POST, request.FILES)
         image = request.FILES["uploaded_img"]
+
+        graph_div = pl.offline.plot(fig, auto_open = False, output_type="div")
 
         context = {"image": image}
         return render(request, "faceapp/result.html", context)

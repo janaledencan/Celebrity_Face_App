@@ -1,0 +1,18 @@
+{% extends 'faceapp/base.html' %}
+{% block content %}
+{% load static %}
+
+    <div>
+        <img src="{{ image }}"> 
+        {% for prediction in predicted_values %}
+                <p>{{ prediction }}</p>
+        {% endfor %}
+
+        {% for name in names %}
+            <p>{{ name }}</p>
+        {% endfor %}
+        
+
+    </div>
+
+{% endblock %}

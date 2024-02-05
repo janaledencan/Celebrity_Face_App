@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from faceapp.forms import UserForm
+from faceapp.forms import UserForm, ImageForm
 from faceapp.models import User
 
 import tensorflow as tf
@@ -16,6 +16,9 @@ import urllib.request
 import json
 import os
 import ssl
+
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 
 def extract_face(filename, required_size=(224, 224)):
@@ -54,87 +57,101 @@ def home(request):
 
 
 def post_user_data(request):
-    form = UserForm(initial={"sex": "M"})
+    #form = UserForm(initial={"sex": "M"})
+    form =ImageForm(initial={"sex": "M"})
     class_names = ['Angelina Jolie', 'Brad Pitt', 'Denzel Washington', 'Hugh Jackman', 'Jennifer Lawrence', 'Johnny Depp', 'Kate Winslet', 'Leonardo DiCaprio', 'Megan Fox', 'Natalie Portman', 'Nicole Kidman', 'Robert Downey Jr', 'Sandra Bullock', 'Scarlett Johansson', 'Tom Cruise', 'Tom Hanks', 'Will Smith']
 
 
     if request.method == "POST":
-        form = UserForm(request.POST, request.FILES)
-        
-                 
+        #form = UserForm(request.POST, request.FILES)
+        #form = ImageForm(request.POST, request.FILES)
         image = request.FILES["uploaded_img"]
 
-        # This is place where image or image location should go
-        pixels = extract_face(image.name)
+        context = {"image": image}
+        return render(request, "faceapp/result.html", context)
 
-        # convert one face into samples
-        pixels = pixels.astype('float32')
-        samples = expand_dims(pixels, axis=0)
+        """ 
+        form = ImageForm({}, request.FILES["uploaded_img"])
+        if form.is_valid():
+            image_f = form.cleaned_data.get("img")
+        #files = request.FILES["file"]
+        #for file in files:      
+            #image = file
+            #print("Poz " + image.name, os.getcwd())
+            # This is place where image or image location should go
+            pixels = extract_face(image_f.image)
 
-        allowSelfSignedHttps(True) # this line is needed if you use self-signed certificate in your scoring service.
+            # convert one face into samples
+            pixels = pixels.astype('float32')
+            samples = expand_dims(pixels, axis=0)
 
-        # Request data goes here
-        # The example below assumes JSON formatting which may be updated
-        # depending on the format your endpoint expects.
-        # More information can be found here:
-        # https://docs.microsoft.com/azure/machine-learning/how-to-deploy-advanced-entry-script
-        data =  {
-        "input_data": {'input_1':samples.tolist()},
-        "params": {}
-        }
+            allowSelfSignedHttps(True) # this line is needed if you use self-signed certificate in your scoring service.
 
-        body = str.encode(json.dumps(data))
+            # Request data goes here
+            # The example below assumes JSON formatting which may be updated
+            # depending on the format your endpoint expects.
+            # More information can be found here:
+            # https://docs.microsoft.com/azure/machine-learning/how-to-deploy-advanced-entry-script
+            data =  {
+            "input_data": {'input_1':samples.tolist()},
+            "params": {}
+            }
 
-        url = 'https://ruap-actors-recognition-endpt.germanywestcentral.inference.ml.azure.com/score'
-        # Replace this with the primary/secondary key or AMLToken for the endpoint
-        api_key = 'p6oeUnLUs2Ib52gVvnnV0H5x9aovVfuV'
-        if not api_key:
-            raise Exception("A key should be provided to invoke the endpoint")
+            body = str.encode(json.dumps(data))
 
-        # The azureml-model-deployment header will force the request to go to a specific deployment.
-        # Remove this header to have the request observe the endpoint traffic rules
-        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key), 'azureml-model-deployment': 'celebrity-recognition-model-1' }
+            url = 'https://ruap-actors-recognition-endpt.germanywestcentral.inference.ml.azure.com/score'
+            # Replace this with the primary/secondary key or AMLToken for the endpoint
+            api_key = 'p6oeUnLUs2Ib52gVvnnV0H5x9aovVfuV'
+            if not api_key:
+                raise Exception("A key should be provided to invoke the endpoint")
 
-        req = urllib.request.Request(url, body, headers)
+            # The azureml-model-deployment header will force the request to go to a specific deployment.
+            # Remove this header to have the request observe the endpoint traffic rules
+            headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key), 'azureml-model-deployment': 'celebrity-recognition-model-1' }
 
-        try:
-            response = urllib.request.urlopen(req)
+            req = urllib.request.Request(url, body, headers)
 
-            result = response.read() # % for all celebrities
-            #print(result)
-            predicted_labels = np.argmax(result, axis=-1) #most similar - index
-            celebrity_name = ""
+            try:
+                response = urllib.request.urlopen(req)
 
-            for label in predicted_labels:
-                celebrity_name = class_names[label]
+                result = response.read() # % for all celebrities
+                #print(result)
+                predicted_labels = np.argmax(result, axis=-1) #most similar - index
+                celebrity_name = ""
 
-            request.session['predictions'] = result
+                for label in predicted_labels:
+                    celebrity_name = class_names[label]
 
-            if form.is_valid():
+                request.session['predictions'] = result
+
+            
                 user_post = User.objects.create(
                     age=form.cleaned_data.get("age"),
                     sex=form.cleaned_data.get("sex"),
                     predicted_face = celebrity_name,
                 ).save()
                 return HttpResponseRedirect(reverse("faceapp:post_user_data", args=[]))
-            else:
-                context = {"form": form, "image_form": image_form}
-                return render(request, "faceapp/home.html", context)
+            
+            except urllib.error.HTTPError as error:
+                print("The request failed with status code: " + str(error.code))
 
-        except urllib.error.HTTPError as error:
-            print("The request failed with status code: " + str(error.code))
-
-            # Print the headers - they include the requert ID and the timestamp, which are useful for debugging the failure
-            print(error.info())
-            print(error.read().decode("utf8", 'ignore'))
+                # Print the headers - they include the requert ID and the timestamp, which are useful for debugging the failure
+                print(error.info())
+                print(error.read().decode("utf8", 'ignore'))
         
+
+        else:
+            context = {"form": form}
+            return render(request, "faceapp/home.html", context)
+
        
 
-    else:
-        form = UserForm()
-        predictions = request.session.get('predictions')
-        context = {"form": form, 
-                   "predicted_values": predictions,
-                   "names": class_names,
-                   }
-    return render(request, "faceapp/home.html", context)
+    
+    form = ImageForm()
+    predictions = request.session.get('predictions')
+    context = {"form": form, 
+            "predicted_values": predictions,
+            "names": class_names,
+            }
+    return render(request, "faceapp/result.html", context)
+ """

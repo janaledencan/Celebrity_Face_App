@@ -2,13 +2,19 @@
 {% block content %}
 {% load static %}
 
+    <div class="row mt-4 text-center mb-5">
+        <div >
+            <a class="button" href="{% url 'faceapp:get_prediction' %}">Show</a>
+        </div>
+    </div>
+
     <div>
         <img src="{{ image }}"> 
         {% for prediction in predicted_values %}
-                <p>{{ prediction }}</p>
+            <p>{{ prediction }}</p>
         {% endfor %}
 
-        {% for name in names %}
+        {% for name in celebrities %}
             <p>{{ name }}</p>
         {% endfor %}
         

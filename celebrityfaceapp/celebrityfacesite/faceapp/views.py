@@ -73,7 +73,7 @@ def post_user_data(request):
             return HttpResponseRedirect(reverse("faceapp:post_user_data", args=[]))
         else:
              form = UserForm()
-             return render(request, "faceapp/result.html", {'form': form})
+             return render(request, "faceapp/home.html", {'form': form})
         
         
 
@@ -82,7 +82,9 @@ def post_user_data(request):
 
         #context = {"image": image}
         #return render(request, "faceapp/result.html", context)
-
-
         
-    return render(request, "faceapp/home.html", {'form': UserForm})
+    return render(request, "faceapp/result.html", {'celebrities':class_names,})
+
+
+def get_prediction(request):
+     

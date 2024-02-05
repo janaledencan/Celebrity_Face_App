@@ -21,6 +21,10 @@ class User(models.Model):
         choices = Sex.choices,
         default = Sex.male,
     )
+    predicted_face = models.CharField(
+        max_length = 20,
+        default = "Brad Pitt",
+    )
 
     def __str__(self) -> str:
         return f"{self.age} - {self.sex}"

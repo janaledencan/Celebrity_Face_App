@@ -5,6 +5,7 @@ from .models import User
 
 class UserForm(forms.ModelForm):
 
+
     class Meta:
         model = User
         fields = [
@@ -16,7 +17,7 @@ class UserForm(forms.ModelForm):
             "age": forms.Select(attrs={"class": "form-control"}),
             "sex": forms.Select(attrs={"class": "form-control"}),
         }
-
+     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
@@ -28,3 +29,4 @@ class UserForm(forms.ModelForm):
         if errors:
             raise ValidationError(errors)
         return self.cleaned_data
+

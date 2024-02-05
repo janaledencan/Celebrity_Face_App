@@ -65,29 +65,62 @@
 
     <div class="card mb-5 shadow-lg mb-5 bg-body rounded">
         <div class="card-header custom-bg">
-          Where magic happens...
+          <h5>Where magic happens...</h5>
         </div>
-        <div class="card-body">
-            <div class="w-50">
-                <form action="{% url 'faceapp:post_user_data' %}" method="post" enctype="multipart/form-data" class="dropzone" id="my-awesome-dropzone">
+        <div class="card-body mt-4">
+            <div class="w-50 mx-auto my-2">
+                <form action="{% url 'faceapp:post_user_data' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="file" name="uploaded_img">
                 </form>         
             </div>
             <form action="{% url 'faceapp:post_user_data' %}" method="post"> 
-                <div class="form-group">
+                <div class="form-group mt-5">
                 {% csrf_token %}
                 {% include 'faceapp/form.html' with form=form %}
         
-                <div class="row mt-4 text-center mb-5">
-                    <div clss="col-md-8 ms-2">
-                        <input type="submit" value="Get Result" class="custom-btn btn px-4 py-2 shadow rounded">
+                    <div class="row mt-4 text-center mb-5">
+                        <!-- Button trigger modal -->
+                        <div >
+                            <button type="submit" class="custom-btn btn px-4 py-2 shadow rounded" href="{% url 'faceapp:post_user_data' %}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                Get Result-btn
+                            </button>
+                        </div>
                     </div>
                 </div>
-                </div>
             </form>
+
         </div>      
     </div>
+
+
+    
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           
+            {% for prediction in predicted_values %}
+                <p>{{ prediction }}</p>
+            {% endfor %}
+
+            {% for name in names %}
+                <p>{{ name }}</p>
+            {% endfor %}
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
     <div class="position-relative overflow-hidden mt-5"> 
@@ -255,7 +288,5 @@
         </div>
     </div>
         
-
   
-
 {% endblock %}

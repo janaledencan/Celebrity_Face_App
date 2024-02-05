@@ -4,7 +4,7 @@
 
     <div class="row mt-4 text-center mb-5">
         <div >
-            <a class="button" href="{% url 'faceapp:get_prediction' %}">Show</a>
+            <a class="button" href="{% url 'faceapp:get_prediction' req.id %}">Show</a>
         </div>
     </div>
 
@@ -14,7 +14,7 @@
             <p>{{ prediction }}</p>
         {% endfor %}
 
-        {% for name in celebrities %}
+        {% for name in names %}
             <p>{{ name }}</p>
         {% endfor %}
         

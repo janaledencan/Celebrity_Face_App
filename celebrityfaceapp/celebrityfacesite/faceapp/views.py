@@ -70,21 +70,79 @@ def post_user_data(request):
             user.predicted_face="BP"
             user.save()
 
+            
             return HttpResponseRedirect(reverse("faceapp:post_user_data", args=[]))
         else:
              form = UserForm()
              return render(request, "faceapp/home.html", {'form': form})
         
-        
-
-        #form = ImageForm(request.POST, request.FILES)
-        #image = request.FILES["uploaded_img"]
-
-        #context = {"image": image}
-        #return render(request, "faceapp/result.html", context)
-        
-    return render(request, "faceapp/result.html", {'celebrities':class_names,})
+    req=User.objects.latest('id')
+   
+    return render(request, "faceapp/result.html", {'celebrities':class_names, "req": req})
 
 
-def get_prediction(request):
+
+
+def get_prediction(request, req_id):
      
+    user_input = User.objects.get(pk=req_id)
+    class_names = ['Angelina Jolie', 'Brad Pitt', 'Denzel Washington', 'Hugh Jackman', 'Jennifer Lawrence', 'Johnny Depp', 'Kate Winslet', 'Leonardo DiCaprio', 'Megan Fox', 'Natalie Portman', 'Nicole Kidman', 'Robert Downey Jr', 'Sandra Bullock', 'Scarlett Johansson', 'Tom Cruise', 'Tom Hanks', 'Will Smith']
+
+    if user_input is not None:
+
+        image_path = user_input.image
+        pixels = extract_face(image_path)
+
+        # convert one face into samples
+        pixels = pixels.astype('float32')
+        samples = expand_dims(pixels, axis=0)
+
+        allowSelfSignedHttps(True) # this line is needed if you use self-signed certificate in your scoring service.
+
+  
+        data =  {
+            "input_data": {'input_1':samples.tolist()},
+            "params": {}
+        }
+
+        body = str.encode(json.dumps(data))
+
+        url = 'https://ruap-actors-recognition-endpt.germanywestcentral.inference.ml.azure.com/score'
+        # Replace this with the primary/secondary key or AMLToken for the endpoint
+        api_key = 'p6oeUnLUs2Ib52gVvnnV0H5x9aovVfuV'
+        if not api_key:
+            raise Exception("A key should be provided to invoke the endpoint")
+
+        # The azureml-model-deployment header will force the request to go to a specific deployment.
+        # Remove this header to have the request observe the endpoint traffic rules
+        headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key), 'azureml-model-deployment': 'celebrity-recognition-model-1' }
+
+        req = urllib.request.Request(url, body, headers)
+
+        try:
+            response = urllib.request.urlopen(req)
+
+            result = response.read()
+
+            predicted_labels = np.argmax(result, axis=-1) #most similar - index
+            celebrity_name = ""
+
+            #for label in predicted_labels:
+               # celebrity_name = class_names[label]
+
+
+
+            
+            print(result)
+        except urllib.error.HTTPError as error:
+            print("The request failed with status code: " + str(error.code))
+
+            # Print the headers - they include the requert ID and the timestamp, which are useful for debugging the failure
+            print(error.info())
+            print(error.read().decode("utf8", 'ignore'))
+
+
+        return render(request, 'faceapp/result.html', { "predicted_values": result,
+            "names": class_names, "req": user_input})
+
+    

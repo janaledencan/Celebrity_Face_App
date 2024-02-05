@@ -122,13 +122,23 @@ def get_prediction(request, req_id):
         try:
             response = urllib.request.urlopen(req)
 
-            result = response.read()
+            result = response.read() #bytestring
 
-            predicted_labels = np.argmax(result, axis=-1) #most similar - index
+            # Remove the outer brackets and split by commas to get a list of strings
+            list_of_strings = result.decode().strip('[]').split(', ')
+
+            # Convert the list of strings to a list of floats
+            list_of_floats = [float(s) for s in list_of_strings]
+
+            # Create a NumPy array from the list of floats
+            numpy_array = np.array(list_of_floats, dtype=np.float64)
+
+
+            #predicted_labels = np.argmax(result, axis=-1) #most similar - index
             celebrity_name = ""
 
             #for label in predicted_labels:
-               # celebrity_name = class_names[label]
+               #celebrity_name = class_names[label]
 
 
 
@@ -142,7 +152,7 @@ def get_prediction(request, req_id):
             print(error.read().decode("utf8", 'ignore'))
 
 
-        return render(request, 'faceapp/result.html', { "predicted_values": result,
+        return render(request, 'faceapp/result.html', { "predicted_values": numpy_array,
             "names": class_names, "req": user_input})
 
     

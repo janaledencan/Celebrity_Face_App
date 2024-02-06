@@ -66,8 +66,18 @@ def home(request):
 
     fig = make_subplots(rows=1, cols=1)
     fig.add_trace(Bar(x=list(counts_by_category.keys()), y=list(counts_by_category.values())))
-    fig.update_layout(title="Predictions")
-    
+    fig.update_layout(
+        title={
+            'text': "Predicted faces",
+            'x':  0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
+        paper_bgcolor = "rgba(0,0,0,0)",
+    )
+    fig.update_traces(marker_color="rgb(0, 178, 202)")
+
+
     #graph_div = pl.plot(fig, include_plotlyjs=False, output_type='div')
     graph_div = pl.offline.plot(fig, auto_open = False, output_type="div")
     

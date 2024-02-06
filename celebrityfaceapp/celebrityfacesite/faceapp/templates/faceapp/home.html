@@ -36,14 +36,29 @@
                 
                 <div class="col-9 d-flex align-items-center justify-content-center">
                     <div class="content flex-container">
-                        <p>Graf</p>
-                        <!----------------------------------Added by Nikola---------------------------------->
-                        <div style="width: 500px; height: auto;">
+                        
+                        <div class="btn-group ms-5" role="group" aria-label="Age Selection">
+                            <button type="button" class="btn custom-btn2" data-age="15-25">15-25</button>
+                            <button type="button" class="btn custom-btn2" data-age="26-40">26-40</button>
+                            <button type="button" class="btn custom-btn2" data-age="41-55">41-55</button>
+                            <button type="button" class="btn custom-btn2" data-age="55+">55+</button>
+                          </div>
+
+                        <div style="width: 500px; height: auto;" id="chart">
                             {{ graph_div|safe }}
                         </div>
-                        <!----------------------------------------------------------------------------------->
+                        
                     </div>
                 </div>
+                <script>
+                    $(document).ready(function() {
+                        $('.btn-group > .btn').click(function() {
+                            var selectedAge = $(this).data('age');
+                            window.location.href = '?age=' + selectedAge;
+                        });
+                    });
+                </script>
+               
             </div>
         </div>
     </div>

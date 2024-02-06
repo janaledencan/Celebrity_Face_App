@@ -13,20 +13,28 @@
             </div>                
         </div>
     </div>
-
-    {% if celebrity_name %}
-    <p>For given image person at image is most similar to {{ celebrity_name }}</p>
-    {% endif %}
     
     <div class="container">
-        <div class="row justify-content-center">
-            
-            {% for name, prediction in results.items %}
-                <div class="col-3 me-3 mb-3 text-start"><h5>{{ name }}</h5></div>
-                <div class="col-7 text-start">{{ prediction }}%</div>
-            {% endfor %}
+        {% if celebrity_name %}
+            <p>For given image person at image is most similar to {{ celebrity_name }}</p>
+        {% endif %}
+        <div class="row">
+            {% if req.image %}
+                <div class="col-md-4">
+                    <p>Your uploaded image</p>
+                    <img src="/media/{{ req.image }}" height="300px" width="300px">
+                </div>
+            {% endif %}
+            {% if celebrity_image_path %}
+                <div class="col-md-4">
+                    <p>Your lookalike celebrity</p>
+                    <img src="{% static 'faceapp/images/carousel_img/' %}{{ celebrity_image_path }}" height="300px" width="300px">
+                </div>
+            {% endif %}
+            <div class="col-md-4">
+                {{ graph_div|safe }}
+            </div>
         </div>
     </div>
-
 
 {% endblock %}

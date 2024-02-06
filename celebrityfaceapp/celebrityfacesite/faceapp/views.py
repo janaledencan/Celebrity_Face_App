@@ -1,3 +1,4 @@
+from heapq import nlargest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -141,6 +142,12 @@ def get_prediction(request, req_id):
 
             results_dict = dict(zip(class_names, rounded_array))
 
+            # Extract the top  5 items using nlargest()
+            top_five_items = nlargest(5, results_dict.items(), key=lambda x: x[1])
+
+            # Convert the list of tuples back into a dictionary
+            top_five_dict = dict(top_five_items)
+
             #change predicted_face value of object with the name of the class with the highest score
             predicted_label = np.argmax(numpy_array, axis=-1) #most similar - index
         
@@ -158,6 +165,6 @@ def get_prediction(request, req_id):
             print(error.read().decode("utf8", 'ignore'))
 
 
-        return render(request, 'faceapp/result.html', { "results": results_dict, "req": user_input, "celebrity_name": celebrity_name })
+        return render(request, 'faceapp/result.html', { "results": top_five_dict, "req": user_input, "celebrity_name": celebrity_name })
 
     

@@ -2,20 +2,31 @@
 {% block content %}
 {% load static %}
 
-    <div class="row mt-4 text-center mb-5">
-        <div >
-            <a class="button" href="{% url 'faceapp:get_prediction' req.id %}">Show</a>
+    <div class="row mt-4 mb-5">
+        <div class="col-3">
+            <h2>Result</h2>
+        </div>
+        <div class="col-7">
+            <div >
+                <a class="button me-5 custom-btn2 btn px-4 py-2 shadow" href="{% url 'faceapp:get_prediction' req.id %}">Show</a>
+                <a class="button custom-btn2 btn px-4 py-2 shadow" href="{% url 'faceapp:home' %}">Back</a>
+            </div>                
         </div>
     </div>
 
-    <div>
-        {% for prediction in predicted_values %}
-            <p>{{ prediction }}</p>
-        {% endfor %}
-
-        {% for name in names %}
-            <p>{{ name }}</p>
-        {% endfor %}
+    {% if celebrity_name %}
+    <p>For given image person at image is most similar to {{ celebrity_name }}</p>
+    {% endif %}
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            
+            {% for name, prediction in results.items %}
+                <div class="col-3 me-3 mb-3 text-start"><h5>{{ name }}</h5></div>
+                <div class="col-7 text-start">{{ prediction }}%</div>
+            {% endfor %}
+        </div>
     </div>
+
 
 {% endblock %}

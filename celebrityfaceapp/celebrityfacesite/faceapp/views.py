@@ -133,15 +133,21 @@ def get_prediction(request, req_id):
             # Create a NumPy array from the list of floats
             numpy_array = np.array(list_of_floats, dtype=np.float64)
 
-
-            #predicted_labels = np.argmax(result, axis=-1) #most similar - index
-            celebrity_name = ""
-
-            #for label in predicted_labels:
-               #celebrity_name = class_names[label]
+           
+            percent_array = numpy_array *  100
+            # Round each element to  12 decimal places
+            rounded_array = np.around(percent_array, decimals=12)
 
 
+            results_dict = dict(zip(class_names, rounded_array))
 
+            #change predicted_face value of object with the name of the class with the highest score
+            predicted_label = np.argmax(numpy_array, axis=-1) #most similar - index
+        
+            celebrity_name = class_names[predicted_label]
+
+            user_input.predicted_face = celebrity_name
+            user_input.save()
             
             print(result)
         except urllib.error.HTTPError as error:
@@ -152,7 +158,6 @@ def get_prediction(request, req_id):
             print(error.read().decode("utf8", 'ignore'))
 
 
-        return render(request, 'faceapp/result.html', { "predicted_values": numpy_array,
-            "names": class_names, "req": user_input})
+        return render(request, 'faceapp/result.html', { "results": results_dict, "req": user_input, "celebrity_name": celebrity_name })
 
     

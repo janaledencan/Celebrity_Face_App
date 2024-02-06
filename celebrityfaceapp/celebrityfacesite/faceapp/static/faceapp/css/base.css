@@ -29,6 +29,11 @@ h1 {
     color: #fffffe;
 }
 
+.custom-btn2 {
+    background-color: #7dcfb6;
+    color: #fffffe;
+}
+
 .custom-bg {
     background-color: #00b2ca;
 }
@@ -36,7 +41,6 @@ h1 {
 .custom-bg2 {
     background-color: #7dcfb6;
 }
-
 
 
 hr {

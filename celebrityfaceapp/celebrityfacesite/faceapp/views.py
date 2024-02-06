@@ -19,7 +19,8 @@ import os
 import ssl
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+from plotly.offline import plot
+import plotly.graph_objects as go
 
 
 def extract_face(filename, required_size=(224, 224)):
@@ -79,7 +80,11 @@ def post_user_data(request):
         
     req=User.objects.latest('id')
    
-    return render(request, "faceapp/result.html", {'celebrities':class_names, "req": req})
+    context = {
+        'celebrities':class_names, 
+        "req": req
+        }
+    return render(request, "faceapp/result.html", context)
 
 
 
@@ -164,7 +169,37 @@ def get_prediction(request, req_id):
             print(error.info())
             print(error.read().decode("utf8", 'ignore'))
 
+        celebrity_image_path = PickLookalikeImage(celebrity_name)
 
-        return render(request, 'faceapp/result.html', { "results": top_five_dict, "req": user_input, "celebrity_name": celebrity_name })
+        ### Pie chart
+        labels = list(top_five_dict.keys())
+        data = list(top_five_dict.values())
+
+        fig = go.Figure(data=[go.Pie(labels=labels, values=data, hole=0.5)])
+        fig.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',  # set background color to transparent
+            paper_bgcolor='rgba(0,0,0,0)',
+            margin=dict(t=0, b=0, l=0, r=0),
+            autosize=False,
+            width=600,
+            height=300 
+        )
+        graph_div = plot(fig, auto_open=False, output_type="div")
+        ### end Pie chart
+
+        context = {
+            "results": top_five_dict, 
+            "req": user_input, 
+            "celebrity_name": celebrity_name,
+            "celebrity_image_path" : celebrity_image_path,
+            "graph_div" : graph_div,
+        }
+        return render(request, 'faceapp/result.html', context)
 
     
+def PickLookalikeImage(celebrity_name):
+    image_path = ""
+    name = celebrity_name.split()
+    image_path += name[0] + "" + name[1][0] + ".jpg"
+    return image_path
+

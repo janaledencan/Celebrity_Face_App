@@ -20,9 +20,10 @@ import json
 import os
 import ssl
 
-from django.core.files.uploadedfile import SimpleUploadedFile
-
-
+from django.db.models import Count
+from plotly.subplots import make_subplots
+from plotly.graph_objs import Bar
+import plotly.offline as pl
 
 def extract_face(filename, required_size=(224, 224)):
 	# load image from file
@@ -49,20 +50,33 @@ def allowSelfSignedHttps(allowed):
     if allowed and not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-
 def home(request):
-    form = UserForm(initial={"sex": "M"})
+    age = request.GET.get('age', None)
+    form = UserForm(initial={"sex": "M", "age": age})
 
-    #-------------------------------------------------------Added by Nikola-----------------------------------------------------------#
-    fig = pl.graph_objs.Figure(data=[pl.graph_objs.Bar(x=['Male','Female'],y=[135,111])])
+    if age:
+        data_inputs = User.objects.filter(age=age)
+    else:
+        data_inputs = User.objects.all()
+
+    results = data_inputs.values('predicted_face')
+    results = results.annotate(count=Count('id'))
+    results_list = list(results)
+    counts_by_category = {result['predicted_face']: result['count'] for result in results_list}
+
+    fig = make_subplots(rows=1, cols=1)
+    fig.add_trace(Bar(x=list(counts_by_category.keys()), y=list(counts_by_category.values())))
+    fig.update_layout(title="Predictions")
+    
+    #graph_div = pl.plot(fig, include_plotlyjs=False, output_type='div')
     graph_div = pl.offline.plot(fig, auto_open = False, output_type="div")
-    #---------------------------------------------------------------------------------------------------------------------------------#
-
-    result_number=User.objects.count()
-    context = {"form": form,
-               "result_number": result_number,
-               "graph_div":graph_div
-               }
+    
+    result_number = User.objects.count()
+    context = {
+        "form": form,
+        "result_number": result_number,
+        "graph_div": graph_div
+    }
     return render(request, "faceapp/home.html", context)
 
 

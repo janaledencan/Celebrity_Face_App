@@ -26,6 +26,8 @@ class User(models.Model):
         default = "Brad Pitt",
     )
 
+    image = models.ImageField(null = True, blank=True, upload_to="images/")
+
     def __str__(self) -> str:
         return f"{self.age} - {self.sex}"
     

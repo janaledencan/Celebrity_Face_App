@@ -16,22 +16,22 @@
     
     <div class="container">
         {% if celebrity_name %}
-            <p>For given image person at image is most similar to {{ celebrity_name }}</p>
+            <p>For given image person at image is most similar to <strong>{{ celebrity_name }}</strong>.</p>
         {% endif %}
-        <div class="row">
+        <div class="row mt-5">
             {% if req.image %}
-                <div class="col-md-4">
+                <div class="col-md-3 me-5">
                     <p>Your uploaded image</p>
-                    <img src="/media/{{ req.image }}" height="300px" width="300px">
+                    <img src="/media/{{ req.image }}" height="300px" width="300px" class="shadow p-3 mb-5 bg-white rounded">
                 </div>
             {% endif %}
             {% if celebrity_image_path %}
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <p>Your lookalike celebrity</p>
-                    <img src="{% static 'faceapp/images/carousel_img/' %}{{ celebrity_image_path }}" height="300px" width="300px">
+                    <img src="{% static 'faceapp/images/carousel_img/' %}{{ celebrity_image_path }}" height="300px" width="300px" class="shadow p-3 mb-5 bg-white rounded">
                 </div>
             {% endif %}
-            <div class="col-md-4">
+            <div class="col-md-3 me-5">
                 {{ graph_div|safe }}
             </div>
         </div>

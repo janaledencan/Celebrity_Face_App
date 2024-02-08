@@ -27,11 +27,13 @@ h1 {
 .custom-btn {
     background-color: #f79256;
     color: #fffffe;
+    border: 2px solid #953c07;
 }
 
 .custom-btn2 {
     background-color: #7dcfb6;
     color: #000000;
+    border: 2px solid #079521;
 }
 
 .custom-bg {
@@ -46,4 +48,9 @@ h1 {
 hr {
     height: 20px;
     background-color: #7dcfb6;
+}
+
+.custom-shadow {
+    box-shadow: -10px -10px 10px rgba(0, 0, 255, 0.5);
+    padding: 10px;
 }

@@ -2,7 +2,7 @@ from heapq import nlargest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from faceapp.forms import UserForm, ImageForm
+from faceapp.forms import UserForm
 from faceapp.models import User
 
 import tensorflow as tf
@@ -71,11 +71,16 @@ def home(request):
     fig.add_trace(Bar(x=list(counts_by_category.keys()), y=list(counts_by_category.values())))
     fig.update_layout(
         title={
-            'text': "Predicted faces",
+            'text': "Predicted faces",   
             'x':  0.5,
             'xanchor': 'center',
-            'yanchor': 'top'
+            'yanchor': 'top',
+            'font': {
+                'size':  24, 
+            }
         },
+        width=900,      
+        height=600, 
         paper_bgcolor = "rgba(0,0,0,0)",
     )
     fig.update_traces(marker_color="rgb(0, 178, 202)")

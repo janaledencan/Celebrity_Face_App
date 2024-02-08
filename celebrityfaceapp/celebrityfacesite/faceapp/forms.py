@@ -16,7 +16,8 @@ class UserForm(forms.ModelForm):
         widgets = {
             "age": forms.Select(attrs={"class": "form-control"}),
             "sex": forms.Select(attrs={"class": "form-control"}),
-           
+            'image': forms.FileInput(attrs={
+                'style': 'margin-left: 20px;'}),
         }
      
     def __init__(self, *args, **kwargs):
@@ -32,11 +33,3 @@ class UserForm(forms.ModelForm):
         return self.cleaned_data
 
 
-class ImageForm(forms.Form):
-
-    img = forms.ImageField(widget=forms.widgets.FileInput)
-    age = forms.Select(attrs={"class": "form-control"})
-    sex = forms.Select(attrs={"class": "form-control"})
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)

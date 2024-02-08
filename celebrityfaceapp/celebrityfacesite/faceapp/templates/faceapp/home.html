@@ -29,20 +29,20 @@
     <div class="position-relative overflow-hidden"> 
         <div class="col-md-12 p-lg-5 my-5">
             <div class="row">
-                <div class="col-3">
-                    <h3 class="ms-4">{{result_number}}</h3>
+                <div class="col-3 d-flex flex-column justify-content-center align-items-center">
+                    <h3>{{result_number}}</h3>
                     <p>Number of <br> processed <br> requests</p>
                 </div>
                 
-                <div class="col-9 d-flex align-items-center justify-content-center">
+                <div class="col-9 d-flex">
                     <div class="content flex-container">
                         
-                        <div class="btn-group ms-5" role="group" aria-label="Age Selection">
+                        <div class="btn-group ms-5 justify-content-center" role="group" aria-label="Age Selection">
                             <button type="button" class="btn custom-btn2" data-age="15-25">15-25</button>
                             <button type="button" class="btn custom-btn2" data-age="26-40">26-40</button>
                             <button type="button" class="btn custom-btn2" data-age="41-55">41-55</button>
                             <button type="button" class="btn custom-btn2" data-age="55+">55+</button>
-                          </div>
+                        </div>
 
                         <div style="width: 500px; height: auto;" id="chart">
                             {{ graph_div|safe }}
@@ -70,9 +70,9 @@
             <div class="row">
                 <div class="col-8">
                     <h3 class="mb-4">How to use the application?</h3>
-                    <p class="">1. Upload image by drag and drop or url.</p>
-                    <p class="">2. Write the age of the person in the picture</p>
-                    <p class="">3. Click the Get Result button</p> 
+                    <p class="">1. Write the age and sex of the person in the image.</p>
+                    <p class="">2. Upload the image from your computer.</p>
+                    <p class="">3. Click the Get Result button.</p> 
                 </div>
                 
                 <div class="col-4 d-flex align-items-center justify-content-center">
@@ -87,7 +87,7 @@
         <div class="card-header custom-bg">
           <h5>Where magic happens...</h5>
         </div>
-        <div class="card-body mt-4">
+        <div class="card-body mx-5">
           
 
             <form action="{% url 'faceapp:post_user_data' %}" method="POST" enctype="multipart/form-data"> 
@@ -263,8 +263,8 @@
                             <p>The model does a completely accurate classification for those 17 celebrities, 
                             and in the case of submitting your own picture, you will get a probability of belonging to one 
                             of those 17 classes, which should not be taken literally as a match percentage, but means that 
-                            you have the highest match of those 17 celebrities.</p>
-                            <p>It should also be noted that the result depends on the light and the angle from which the 
+                            you have <u>the highest match</u> of those 17 celebrities.</p>
+                            <p>It should also be noted that the result depends on <u>the light and the angle</u> from which the 
                             picture is taken.</p></div>
                     </div>   
                     

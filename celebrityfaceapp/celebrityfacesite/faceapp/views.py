@@ -86,7 +86,6 @@ def home(request):
     fig.update_traces(marker_color="rgb(0, 178, 202)")
 
 
-    #graph_div = pl.plot(fig, include_plotlyjs=False, output_type='div')
     graph_div = pl.offline.plot(fig, auto_open = False, output_type="div")
     
     result_number = User.objects.count()
